@@ -7,6 +7,10 @@ vendor/etc/acdbdata/QRD/QRD_Hdmi_cal.acdb
 vendor/etc/acdbdata/QRD/QRD_Headset_cal.acdb
 vendor/etc/acdbdata/QRD/QRD_Speaker_cal.acdb
 
+# Audio firmware - from vince
+etc/firmware/novatek_ts_fw.bin:vendor/firmware/novatek_ts_fw.bin
+etc/firmware/tas2557_uCDSP.bin:vendor/firmware/tas2557_uCDSP.bin
+
 # Audio - from vince
 vendor/lib/hw/audio.primary.msm8953.so
 vendor/lib64/hw/audio.primary.msm8953.so
