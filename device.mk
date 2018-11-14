@@ -37,7 +37,10 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     LiveWallpapersPicker \
     librs_jni
-
+    
+    # Fingerprint
+PRODUCT_PACKAGES += \
+    android.hardware.biometrics.fingerprint@2.1-service.xiaomi_vince
 
 # Google Permissions
 PRODUCT_COPY_FILES += \
@@ -49,8 +52,7 @@ PRODUCT_COPY_FILES += \
 
 # Ramdisk
 PRODUCT_PACKAGES += \
-    init.vince.rc \
-    init.goodix.sh
+    init.vince.rc
 
 # Sensors
 PRODUCT_COPY_FILES += \
