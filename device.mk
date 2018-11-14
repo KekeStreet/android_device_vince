@@ -37,11 +37,7 @@ PRODUCT_PACKAGES += \
 PRODUCT_PACKAGES += \
     LiveWallpapersPicker \
     librs_jni
-    
-    # Fingerprint
-PRODUCT_PACKAGES += \
-    android.hardware.biometrics.fingerprint@2.1-service.xiaomi_vince
-
+  
 # Google Permissions
 PRODUCT_COPY_FILES += \
     $(LOCAL_PATH)/permissions/pixel_2017_exclusive.xml:system/etc/permissions/pixel_2017_exclusive.xml \
