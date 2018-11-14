@@ -1,1 +1,1 @@
-add_lunch_combo aoscp_vince-userdebug
+add_lunch_combo lean_vince-userdebug
