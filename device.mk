@@ -48,7 +48,7 @@ PRODUCT_COPY_FILES += \
 
 # Ramdisk
 PRODUCT_PACKAGES += \
-    init.vince.rc
+    init.vince.rc \
     init.goodix.sh
 
 # Sensors
