@@ -1,5 +1,6 @@
 #!/bin/bash
 #
+# Copyright (C) 2016 The CyanogenMod Project
 # Copyright (C) 2017 The LineageOS Project
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,11 +18,57 @@
 
 set -e
 
-# Required!
-export DEVICE=vince
-export DEVICE_COMMON=msm8953-common
-export VENDOR=xiaomi
+DEVICE=vince
+VENDOR=xiaomi
 
-export DEVICE_BRINGUP_YEAR=2017
+# Load extract_utils and do some sanity checks
+MY_DIR="${BASH_SOURCE%/*}"
+if [[ ! -d "$MY_DIR" ]]; then MY_DIR="$PWD"; fi
 
-./../../$VENDOR/$DEVICE_COMMON/extract-files.sh $@
+LINEAGE_ROOT="$MY_DIR"/../../..
+
+HELPER="$LINEAGE_ROOT"/vendor/aoscp/build/tools/extract_utils.sh
+if [ ! -f "$HELPER" ]; then
+    echo "Unable to find helper script at $HELPER"
+    exit 1
+fi
+. "$HELPER"
+
+# default to not sanitizing the vendor folder before extraction
+clean_vendor=false
+
+while [ "$1" != "" ]; do
+    case $1 in
+        -p | --path )           shift
+                                SRC=$1
+                                ;;
+        -s | --section )        shift
+                                SECTION=$1
+                                clean_vendor=false
+                                ;;
+        -c | --clean-vendor )   clean_vendor=true
+                                ;;
+    esac
+    shift
+done
+
+if [ -z "$SRC" ]; then
+    SRC=adb
+fi
+
+# Initialize the helper
+setup_vendor "$DEVICE" "$VENDOR" "$LINEAGE_ROOT" false $clean_vendor
+
+extract "$MY_DIR"/proprietary-files.txt "$SRC" "$SECTION"
+extract "$MY_DIR"/proprietary-files-qc.txt "$SRC" "$SECTION"
+
+DEVICE_BLOB_ROOT="$LINEAGE_ROOT"/vendor/"$VENDOR"/"$DEVICE"/proprietary
+
+# Hax for cam hal
+    patchelf --set-soname libicuuc-v27.so $DEVICE_BLOB_ROOT/vendor/lib/libicuuc-v27.so
+    patchelf --set-soname libminikin-v27.so $DEVICE_BLOB_ROOT/vendor/lib/libminikin-v27.so
+    patchelf --replace-needed android.frameworks.sensorservice@1.0.so android.frameworks.sensorservice@1.0-v27.so $DEVICE_BLOB_ROOT/vendor/lib/libvidhance_gyro.so
+    patchelf --replace-needed libminikin.so libminikin-v27.so $DEVICE_BLOB_ROOT/vendor/lib/libMiWatermark.so
+    patchelf --replace-needed libicuuc.so libicuuc-v27.so $DEVICE_BLOB_ROOT/vendor/lib/libMiWatermark.so
+
+"$MY_DIR"/setup-makefiles.sh
