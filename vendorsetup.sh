@@ -1,1 +1,1 @@
-add_lunch_combo lean_vince-userdebug
+add_lunch_combo bliss_vince-userdebug
